@@ -133,10 +133,10 @@ def main(in_fname, out_fname, co2_conc):
     elevation.missing_value = -9999.
     elevation.long_name = "Site elevation above sea level" ;
 
-    reference_height = f.createVariable('reference_height', 'f8', ('y', 'x',))
-    reference_height.units = "m"
-    reference_height.missing_value = -9999.
-    reference_height.long_name = "Measurement height on flux tower"
+    #reference_height = f.createVariable('reference_height', 'f8', ('y', 'x',))
+    #reference_height.units = "m"
+    #reference_height.missing_value = -9999.
+    #reference_height.long_name = "Measurement height on flux tower"
 
     # write data to file
     x = ndim
