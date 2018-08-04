@@ -18,7 +18,7 @@ import numpy as np
 import netCDF4 as nc
 import datetime
 
-def main(in_fname, out_fname, co2x):
+def main(in_fname, out_fname, co2_conc):
 
     DEG_2_KELVIN = 273.15
     SW_2_PAR = 2.3
@@ -153,9 +153,9 @@ def main(in_fname, out_fname, co2x):
     Wind = df.WIND.values
     PSurf = df.PRESS.values
     #LWdown =
-    if co2x == "amb":
+    if co2_conc == "amb":
         CO2 = df["Ca.A"].values
-    elif co2x == "ele":
+    elif co2_conc == "ele":
         CO2 = df["Ca.E"].values
     elevation = 23.0 # Ellsworth 2017, NCC
     #reference_height =
@@ -169,4 +169,4 @@ if __name__ == "__main__":
     in_fname = "raw_data/eucdata.csv"
     for co2_conc in ["amb", "ele"]:
         out_fname = "EucFACE_met_%s.nc" % (co2_conc)
-        main(in_fname, out_fname, co2x=co2_conc)
+        main(in_fname, out_fname, co2_conc=co2_conc)
