@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-
-Requires Gerry's hiev package to first be installed
+Get met data from the EucFACE experiment so that we can create a forcing file
+for CABLE. This requires Gerry's hiev package to be installed first
 (https://gdevine.github.io/hievpy/)
 
 That's all folks.
@@ -20,13 +20,17 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 
-import hievpy
+import hievpy as hp
 
 def main():
 
     f = open("hiev_api_token.txt", "r")
     api_token = f.read().strip()
-    print(api_token)
+
+    results = hp.search(api_token, experiments=['31'],
+                        upload_from_date="2013-01-01")
+
+    print(results)
 
 
 if __name__ == "__main__":
