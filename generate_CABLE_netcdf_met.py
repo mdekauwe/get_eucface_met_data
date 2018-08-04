@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-Turn the MAESPA input file into a CABLE netcdf file. We can swap MAESPA data
-for the raw data later.
+Turn the MAESPA input file into a CABLE netcdf file. Aim to swap MAESPA data
+for the raw data later when I have more time...
 
 That's all folks.
 """
