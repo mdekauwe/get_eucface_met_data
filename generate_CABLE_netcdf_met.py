@@ -29,6 +29,12 @@ def main(in_fname, out_fname, co2x):
     now = datetime.datetime.now()
     n_time_steps = len(df)
     ndim = 1
+    times = []
+    x = 0.0
+    for i in range(n_time_steps):
+        times.append(x)
+        x += 1800.
+
 
     f = nc.Dataset(out_fname, 'w', format='NETCDF4')
     f.description = 'EucFACE met data, created by Martin De Kauwe'
@@ -119,9 +125,9 @@ def main(in_fname, out_fname, co2x):
     reference_height.long_name = "Measurement height on flux tower"
 
     # data
-    x = 1
-    y = 1
-    #time =
+    x = ndim
+    y = ndim
+    time = times
     latitude = -33.617778 # Ellsworth 2017, NCC
     longitude = 150.740278 # Ellsworth 2017, NCC
     SWdown = df.PAR * PAR_2_SW
