@@ -24,13 +24,20 @@ import hievpy as hp
 
 def main():
 
+    data = "raw_data"
+    if not os.path.exists(data):
+        os.makedirs(data)
+
+    # get out code so we can access hiev
     f = open("hiev_api_token.txt", "r")
     api_token = f.read().strip()
 
     results = hp.search(api_token, experiments=['31'],
                         upload_from_date="2013-01-01")
 
-    print(results)
+    for fname in results:
+        print(fname)
+        hp.download(api_token, fname, path=data)
 
 
 if __name__ == "__main__":
