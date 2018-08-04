@@ -26,27 +26,28 @@ def main(in_fname, out_fname, co2x):
 
     df = pd.read_csv(in_fname)
 
-    now = datetime.datetime.now()
-    n_time_steps = len(df)
     ndim = 1
+    n_time_steps = len(df)
+
     times = []
     secs = 0.0
     for i in range(n_time_steps):
         times.append(secs)
         secs += 1800.
 
+    # create file and write global attributes
     f = nc.Dataset(out_fname, 'w', format='NETCDF4')
     f.description = 'EucFACE met data, created by Martin De Kauwe'
-    f.history = "Created %s" % (now)
+    f.history = "Created %s" % (datetime.datetime.now())
     f.contact = "mdekauwe@gmail.com"
 
-    # dimensions
+    # set dimensions
     f.createDimension('time', n_time_steps)
     f.createDimension('z', ndim)
     f.createDimension('y', ndim)
     f.createDimension('x', ndim)
 
-    # variables
+    # create variables
     time = f.createVariable('time', 'f8', ('time',))
     time.units = "seconds since %s 00:00:00" % (df.Date[0])
     time.long_name = "time"
@@ -137,7 +138,7 @@ def main(in_fname, out_fname, co2x):
     reference_height.missing_value = -9999.
     reference_height.long_name = "Measurement height on flux tower"
 
-    # data
+    # write data to file
     x = ndim
     y = ndim
     z = ndim
@@ -158,7 +159,6 @@ def main(in_fname, out_fname, co2x):
         CO2 = df["Ca.E"].values
     elevation = 23.0 # Ellsworth 2017, NCC
     #reference_height =
-
 
     f.close()
 
