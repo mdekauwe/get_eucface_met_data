@@ -119,11 +119,11 @@ def main(in_fname, out_fname, co2x):
     reference_height.long_name = "Measurement height on flux tower"
 
     # data
-    x = 150.740278 # Ellsworth 2017, NCC
-    y = -33.617778 # Ellsworth 2017, NCC
+    x = 1
+    y = 1
     #time =
-    latitude =
-    longitude =
+    latitude = -33.617778 # Ellsworth 2017, NCC
+    longitude = 150.740278 # Ellsworth 2017, NCC
     SWdown = df.PAR * PAR_2_SW
     Tair = df.TAIR.values + DEG_2_KELVIN
     Rainf = df.PPT.values
