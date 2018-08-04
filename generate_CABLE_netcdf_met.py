@@ -50,6 +50,16 @@ def main(in_fname, out_fname, co2x):
     y = f.createVariable('y', 'f8', ('y',))
     y.units = ""
 
+    latitude = f.createVariable('latitude', 'f8', ('y', 'x',))
+    latitude.units = "degrees_north"
+    latitude._FillValue = -9999.
+    latitude.long_name = "Latitude"
+
+    longitude = f.createVariable('longitude', 'f8', ('y', 'x',))
+    longitude.units = "degrees_east"
+    longitude._FillValue = -9999.
+    longitude.long_name = "Longitude"
+
     SWdown = f.createVariable('SWdown', 'f8', ('time', 'y', 'x',))
     SWdown.units = "W/m^2"
     SWdown.missing_value = -9999.
@@ -109,9 +119,11 @@ def main(in_fname, out_fname, co2x):
     reference_height.long_name = "Measurement height on flux tower"
 
     # data
-    #x =
-    #y =
+    x = 150.740278 # Ellsworth 2017, NCC
+    y = -33.617778 # Ellsworth 2017, NCC
     #time =
+    latitude =
+    longitude =
     SWdown = df.PAR * PAR_2_SW
     Tair = df.TAIR.values + DEG_2_KELVIN
     Rainf = df.PPT.values
@@ -123,7 +135,7 @@ def main(in_fname, out_fname, co2x):
         CO2 = df["Ca.A"].values
     elif co2x == "ele":
         CO2 = df["Ca.E"].values
-    #elevation =
+    elevation = 23.0 # Ellsworth 2017, NCC
     #reference_height =
 
 
