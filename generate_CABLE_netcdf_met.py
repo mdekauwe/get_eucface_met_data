@@ -145,7 +145,7 @@ def main(in_fname, out_fname, co2_conc):
     Qair = convert_rh_to_qair(df.RH.values, df.TAIR.values, df.PRESS.values)
     Wind = df.WIND.values
     PSurf = df.PRESS.values
-    #LWdown =
+    LWdown = estimate_lwdown(df.TAIR.values + DEG_2_KELVIN, df.RH.values)
     if co2_conc == "amb":
         CO2 = df["Ca.A"].values
     elif co2_conc == "ele":
@@ -184,6 +184,11 @@ def calc_esat(tair):
     """
     Calculates saturation vapour pressure
 
+    Params:
+    -------
+    tair : float
+        deg C
+
     Reference:
     ----------
     * Jones (1992) Plants and microclimate: A quantitative approach to
@@ -194,6 +199,23 @@ def calc_esat(tair):
 
     return esat
 
+
+def estimate_lwdown(tairK, rh):
+    """
+    Synthesises downward longwave radiation based on Tair RH
+
+    Reference:
+    ----------
+    * Abramowitz et al. (2012), Geophysical Research Letters, 39, L04808
+
+    """
+    zeroC = 273.15
+
+    sat_vapress = 611.2 * np.exp(17.67 * ((tairK - zeroC) / (tairK - 29.65)))
+    vapress = np.maximum(5.0, rh) / 100. * sat_vapress
+    lw_down = 2.648 * tairK + 0.0346 * vapress - 474.0
+    
+    return lw_down
 
 
 if __name__ == "__main__":
