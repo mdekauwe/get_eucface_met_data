@@ -127,10 +127,10 @@ def main(in_fname, out_fname, co2_conc):
     elevation.missing_value = -9999.
     elevation.long_name = "Site elevation above sea level" ;
 
-    #reference_height = f.createVariable('reference_height', 'f8', ('y', 'x',))
-    #reference_height.units = "m"
-    #reference_height.missing_value = -9999.
-    #reference_height.long_name = "Measurement height on flux tower"
+    reference_height = f.createVariable('reference_height', 'f8', ('y', 'x',))
+    reference_height.units = "m"
+    reference_height.missing_value = -9999.
+    reference_height.long_name = "Crane height"
 
     # write data to file
     x = ndim
@@ -151,7 +151,7 @@ def main(in_fname, out_fname, co2_conc):
     elif co2_conc == "ele":
         CO2 = df["Ca.E"].values
     elevation = 23.0 # Ellsworth 2017, NCC
-    #reference_height =
+    reference_height = 35.0 # setting this to crane height
 
     f.close()
 
@@ -214,7 +214,7 @@ def estimate_lwdown(tairK, rh):
     sat_vapress = 611.2 * np.exp(17.67 * ((tairK - zeroC) / (tairK - 29.65)))
     vapress = np.maximum(5.0, rh) / 100. * sat_vapress
     lw_down = 2.648 * tairK + 0.0346 * vapress - 474.0
-    
+
     return lw_down
 
 
