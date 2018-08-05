@@ -92,17 +92,11 @@ def main(in_fname, out_fname, co2_conc):
     Rainf.long_name = "Rainfall rate"
     Rainf.CF_name = "precipitation_flux"
 
-    #Qair = f.createVariable('Qair', 'f8', ('time', 'z', 'y', 'x',))
-    #Qair.units = "kg/kg"
-    #Qair.missing_value = -9999.
-    #Qair.long_name = "Near surface specific humidity"
-    #Qair.CF_name = "surface_specific_humidity"
-
-    RH = f.createVariable('RH', 'f8', ('time', 'z', 'y', 'x',))
-    RH.units = "%"
-    RH.missing_value = -9999.
-    RH.long_name = "Near surface relative humidity"
-    RH.CF_name = "relative_humidty"
+    Qair = f.createVariable('Qair', 'f8', ('time', 'z', 'y', 'x',))
+    Qair.units = "kg/kg"
+    Qair.missing_value = -9999.
+    Qair.long_name = "Near surface specific humidity"
+    Qair.CF_name = "surface_specific_humidity"
 
     Wind = f.createVariable('Wind', 'f8', ('time', 'z', 'y', 'x',))
     Wind.units = "m/s"
@@ -148,8 +142,7 @@ def main(in_fname, out_fname, co2_conc):
     SWdown = df.PAR * PAR_2_SW
     Tair = df.TAIR.values + DEG_2_KELVIN
     Rainf = df.PPT.values
-    #Qair =
-    RH = df.RH.values
+    Qair = convert_rh_to_qair(df.RH.values, df.TAIR.values, df.PRESS.values)
     Wind = df.WIND.values
     PSurf = df.PRESS.values
     #LWdown =
@@ -161,6 +154,45 @@ def main(in_fname, out_fname, co2_conc):
     #reference_height =
 
     f.close()
+
+def convert_rh_to_qair(rh, tair, press):
+    """
+    Converts relative humidity to specific humidity (kg/kg)
+
+    Params:
+    -------
+    tair : float
+        deg C
+    press : float
+        pa
+    rh : float
+        %
+    """
+
+    # Sat vapour pressure in Pa
+    esat = calc_esat(tair)
+
+    # Specific humidity at saturation:
+    ws = 0.622 * esat / (press - esat)
+
+    # specific humidity
+    qair = (rh / 100) * ws
+
+    return qair
+
+def calc_esat(tair):
+    """
+    Calculates saturation vapour pressure
+
+    Reference:
+    ----------
+    * Jones (1992) Plants and microclimate: A quantitative approach to
+    environmental plant physiology, p110
+    """
+
+    esat = 613.75 * np.exp(17.502 * tair / (240.97 + tair))
+
+    return esat
 
 
 
