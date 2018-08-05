@@ -176,7 +176,7 @@ def convert_rh_to_qair(rh, tair, press):
     ws = 0.622 * esat / (press - esat)
 
     # specific humidity
-    qair = (rh / 100) * ws
+    qair = (rh / 100.0) * ws
 
     return qair
 
