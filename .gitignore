@@ -3,3 +3,9 @@ data
 data/*
 __pycache__
 __pycache__/*
+
+EucFACE_met_amb.nc
+EucFACE_met_ele.nc
+
+raw_data
+raw_data/eucdata.csv
