@@ -42,7 +42,7 @@ def main(in_fname, out_fname, co2_conc):
     f.contact = "mdekauwe@gmail.com"
 
     # set dimensions
-    f.createDimension('time', n_time_steps)
+    f.createDimension('time', "Unlimited (currently %d)" % (n_time_steps))
     f.createDimension('z', ndim)
     f.createDimension('y', ndim)
     f.createDimension('x', ndim)
