@@ -50,6 +50,7 @@ def main(in_fname, out_fname, co2_conc):
     time = f.createVariable('time', 'f8', ('time',))
     time.units = "seconds since %s 00:00:00" % (df.Date[0])
     time.long_name = "time"
+    time.calendar = "standard"
 
     z = f.createVariable('z', 'f8', ('z',))
     z.long_name = "z"
