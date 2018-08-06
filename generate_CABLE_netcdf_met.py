@@ -40,12 +40,13 @@ def main(in_fname, out_fname, co2_conc):
     f.history = "Created by: %s" % (os.path.basename(__file__))
     f.creation_date = "%s" % (datetime.datetime.now())
     f.contact = "mdekauwe@gmail.com"
-    
+
     # set dimensions
     f.createDimension('time', None)
     f.createDimension('z', ndim)
     f.createDimension('y', ndim)
     f.createDimension('x', ndim)
+    #f.Conventions = "CF-1.0"
 
     # create variables
     time = f.createVariable('time', 'f8', ('time',))
@@ -55,15 +56,15 @@ def main(in_fname, out_fname, co2_conc):
 
     z = f.createVariable('z', 'f8', ('z',))
     z.long_name = "z"
-    z.units = ""
+    z.long_name = "z dimension"
 
     y = f.createVariable('y', 'f8', ('y',))
     y.long_name = "y"
-    y.units = ""
+    y.long_name = "y dimension"
 
     x = f.createVariable('x', 'f8', ('x',))
     x.long_name = "x"
-    x.units = ""
+    x.long_name = "x dimension"
 
     latitude = f.createVariable('latitude', 'f8', ('y', 'x',))
     latitude.units = "degrees_north"
