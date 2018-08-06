@@ -42,7 +42,7 @@ def main(in_fname, out_fname, co2_conc):
     f.contact = "mdekauwe@gmail.com"
 
     # set dimensions
-    f.createDimension('time', "Unlimited (currently %d)" % (n_time_steps))
+    f.createDimension('time', None)
     f.createDimension('z', ndim)
     f.createDimension('y', ndim)
     f.createDimension('x', ndim)
@@ -136,7 +136,7 @@ def main(in_fname, out_fname, co2_conc):
     x = ndim
     y = ndim
     z = ndim
-    time = times
+    time[:] = times
     latitude = -33.617778 # Ellsworth 2017, NCC
     longitude = 150.740278 # Ellsworth 2017, NCC
     SWdown = df.PAR * PAR_2_SW
