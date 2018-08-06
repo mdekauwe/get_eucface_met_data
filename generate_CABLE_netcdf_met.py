@@ -27,9 +27,10 @@ def main(in_fname, out_fname, co2_conc):
     df = pd.read_csv(in_fname)
 
     ndim = 1
+    n_timesteps = len(df)
     times = []
     secs = 0.0
-    for i in range(len(df)):
+    for i in range(n_timesteps):
         times.append(secs)
         secs += 1800.
 
@@ -137,7 +138,8 @@ def main(in_fname, out_fname, co2_conc):
     time[:] = times
     latitude[:] = -33.617778 # Ellsworth 2017, NCC
     longitude[:] = 150.740278 # Ellsworth 2017, NCC
-    SWdown = df.PAR * PAR_2_SW
+
+    SWdown[:,0,0] = np.array(df.PAR * PAR_2_SW).reshape(n_timesteps, ndim, ndim)
     Tair = df.TAIR.values + DEG_2_KELVIN
     Rainf = df.PPT.values
     Qair = convert_rh_to_qair(df.RH.values, df.TAIR.values, df.PRESS.values)
