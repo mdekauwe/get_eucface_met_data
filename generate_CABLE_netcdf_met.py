@@ -27,11 +27,9 @@ def main(in_fname, out_fname, co2_conc):
     df = pd.read_csv(in_fname)
 
     ndim = 1
-    n_time_steps = len(df)
-
     times = []
     secs = 0.0
-    for i in range(n_time_steps):
+    for i in range(len(df)):
         times.append(secs)
         secs += 1800.
 
@@ -133,12 +131,12 @@ def main(in_fname, out_fname, co2_conc):
     reference_height.long_name = "Crane height"
 
     # write data to file
-    x = ndim
-    y = ndim
-    z = ndim
+    x[:] = ndim
+    y[:] = ndim
+    z[:] = ndim
     time[:] = times
-    latitude = -33.617778 # Ellsworth 2017, NCC
-    longitude = 150.740278 # Ellsworth 2017, NCC
+    latitude[:] = -33.617778 # Ellsworth 2017, NCC
+    longitude[:] = 150.740278 # Ellsworth 2017, NCC
     SWdown = df.PAR * PAR_2_SW
     Tair = df.TAIR.values + DEG_2_KELVIN
     Rainf = df.PPT.values
@@ -150,8 +148,8 @@ def main(in_fname, out_fname, co2_conc):
         CO2 = df["Ca.A"].values
     elif co2_conc == "ele":
         CO2 = df["Ca.E"].values
-    elevation = 23.0 # Ellsworth 2017, NCC
-    reference_height = 35.0 # setting this to crane height
+    elevation[:] = 23.0 # Ellsworth 2017, NCC
+    reference_height[:] = 35.0 # setting this to crane height
 
     f.close()
 
