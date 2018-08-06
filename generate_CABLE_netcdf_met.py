@@ -139,17 +139,20 @@ def main(in_fname, out_fname, co2_conc):
     latitude[:] = -33.617778 # Ellsworth 2017, NCC
     longitude[:] = 150.740278 # Ellsworth 2017, NCC
 
-    SWdown[:,0,0] = np.array(df.PAR * PAR_2_SW).reshape(n_timesteps, ndim, ndim)
-    Tair = df.TAIR.values + DEG_2_KELVIN
-    Rainf = df.PPT.values
-    Qair = convert_rh_to_qair(df.RH.values, df.TAIR.values, df.PRESS.values)
-    Wind = df.WIND.values
-    PSurf = df.PRESS.values
-    LWdown = estimate_lwdown(df.TAIR.values + DEG_2_KELVIN, df.RH.values)
+    SWdown[:,0,0] = (df.PAR.values * PAR_2_SW).reshape(n_timesteps, ndim, ndim)
+    Tair[:,0,0,0] = (df.TAIR.values + DEG_2_KELVIN).reshape(n_timesteps,
+                                                            ndim, ndim, ndim)
+    Rainf[:,0,0] = df.PPT.values.reshape(n_timesteps, ndim, ndim)
+    qa_vals = convert_rh_to_qair(df.RH.values, df.TAIR.values, df.PRESS.values)
+    Qair[:,0,0,0] = qa_vals.reshape(n_timesteps, ndim, ndim, ndim)
+    Wind[:,0,0,0] = df.WIND.values.reshape(n_timesteps, ndim, ndim, ndim)
+    PSurf[:,0,0] = df.PRESS.values.reshape(n_timesteps, ndim, ndim)
+    lw = estimate_lwdown(df.TAIR.values + DEG_2_KELVIN, df.RH.values)
+    LWdown[:,0,0] = lw.reshape(n_timesteps, ndim, ndim)
     if co2_conc == "amb":
-        CO2 = df["Ca.A"].values
+        CO2[:,0,0] = df["Ca.A"].values.reshape(n_timesteps, ndim, ndim)
     elif co2_conc == "ele":
-        CO2 = df["Ca.E"].values
+        CO2[:,0,0] = df["Ca.E"].values.reshape(n_timesteps, ndim, ndim)
     elevation[:] = 23.0 # Ellsworth 2017, NCC
     reference_height[:] = 35.0 # setting this to crane height
 
