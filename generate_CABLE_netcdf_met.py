@@ -33,13 +33,14 @@ def main(in_fname, out_fname, co2_conc):
     for i in range(n_timesteps):
         times.append(secs)
         secs += 1800.
-
+    print()
     # create file and write global attributes
     f = nc.Dataset(out_fname, 'w', format='NETCDF4')
     f.description = 'EucFACE met data, created by Martin De Kauwe'
-    f.history = "Created %s" % (datetime.datetime.now())
+    f.history = "Created by: %s" % (os.path.basename(__file__))
+    f.creation_date = "%s" % (datetime.datetime.now())
     f.contact = "mdekauwe@gmail.com"
-
+    
     # set dimensions
     f.createDimension('time', None)
     f.createDimension('z', ndim)
