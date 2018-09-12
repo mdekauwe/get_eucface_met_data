@@ -33,7 +33,7 @@ def main(in_fname, out_fname, co2_conc):
     for i in range(n_timesteps):
         times.append(secs)
         secs += 1800.
-    print()
+
     # create file and write global attributes
     f = nc.Dataset(out_fname, 'w', format='NETCDF4')
     f.description = 'EucFACE met data, created by Martin De Kauwe'
@@ -118,11 +118,18 @@ def main(in_fname, out_fname, co2_conc):
     LWdown.long_name = "Surface incident longwave radiation"
     LWdown.CF_name = "surface_downwelling_longwave_flux_in_air"
 
-    CO2 = f.createVariable('CO2', 'f8', ('time', 'y', 'x',))
-    CO2.units = "umol/mol"
+    CO2 = f.createVariable('CO2air', 'f8', ('time', 'z', 'y', 'x',))
+    CO2.units = "ppm"
     CO2.missing_value = -9999.
     CO2.long_name = ""
     CO2.CF_name = ""
+
+    LAI = f.createVariable('LAI', 'f8', ('time', 'y', 'x'))
+    LAI.setncatts({'long_name': u"Leaf Area Index",})
+
+    vcmax = f.createVariable('vcmax', 'f8', ('y', 'x'))
+    ejmax = f.createVariable('ejmax', 'f8', ('y', 'x'))
+    g1 = f.createVariable('g1', 'f8', ('y', 'x'))
 
     elevation = f.createVariable('elevation', 'f8', ('y', 'x',))
     elevation.units = "m" ;
@@ -153,12 +160,17 @@ def main(in_fname, out_fname, co2_conc):
     lw = estimate_lwdown(df.TAIR.values + DEG_2_KELVIN, df.RH.values)
     LWdown[:,0,0] = lw.reshape(n_timesteps, ndim, ndim)
     if co2_conc == "amb":
-        CO2[:,0,0] = df["Ca.A"].values.reshape(n_timesteps, ndim, ndim)
+        CO2[:,0,0] = df["Ca.A"].values.reshape(n_timesteps, ndim, ndim, ndim)
+        vcmax[:] = 86.1425919e-6
+        ejmax[:] = 138.4595736e-6
     elif co2_conc == "ele":
-        CO2[:,0,0] = df["Ca.E"].values.reshape(n_timesteps, ndim, ndim)
+        CO2[:,0,0] = df["Ca.E"].values.reshape(n_timesteps, ndim, ndim, ndim)
+        vcmax[:] = 81.70591263e-6
+        ejmax[:] = 135.8062907e-6
     elevation[:] = 23.0 # Ellsworth 2017, NCC
     reference_height[:] = 35.0 # setting this to crane height
-
+    LAI[:,0,0] = df.lai.values.reshape(n_timesteps, ndim, ndim)
+    g1[:] = 3.8
     f.close()
 
 def convert_rh_to_qair(rh, tair, press):
@@ -226,7 +238,8 @@ def estimate_lwdown(tairK, rh):
 
 if __name__ == "__main__":
 
-    in_fname = "raw_data/eucdata.csv"
+    #in_fname = "raw_data/eucdata.csv"
+    in_fname = "raw_data/euc_met.csv"
     for co2_conc in ["amb", "ele"]:
         out_fname = "EucFACE_met_%s.nc" % (co2_conc)
         main(in_fname, out_fname, co2_conc=co2_conc)
