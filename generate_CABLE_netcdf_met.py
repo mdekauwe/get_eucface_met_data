@@ -131,16 +131,17 @@ def main(in_fname, out_fname, co2_conc):
     vcmax = f.createVariable('vcmax', 'f8', ('y', 'x'))
     ejmax = f.createVariable('ejmax', 'f8', ('y', 'x'))
     g1 = f.createVariable('g1', 'f8', ('y', 'x'))
+    hc = f.createVariable('hc', 'f8', ('y', 'x'))
 
     elevation = f.createVariable('elevation', 'f8', ('y', 'x',))
     elevation.units = "m" ;
     elevation.missing_value = -9999.
     elevation.long_name = "Site elevation above sea level" ;
 
-    reference_height = f.createVariable('reference_height', 'f8', ('y', 'x',))
-    reference_height.units = "m"
-    reference_height.missing_value = -9999.
-    reference_height.long_name = "Crane height"
+    za = f.createVariable('za', 'f8', ('y', 'x',))
+    za.units = "m"
+    za.missing_value = -9999.
+    za.long_name = "level of lowest atmospheric model layer"
 
     # write data to file
     x[:] = ndim
@@ -170,9 +171,10 @@ def main(in_fname, out_fname, co2_conc):
         vcmax[:] = 81.70591263e-6
         ejmax[:] = 135.8062907e-6
     elevation[:] = 23.0 # Ellsworth 2017, NCC
-    reference_height[:] = 35.0 # setting this to crane height
     LAI[:,0,0] = df.lai.values.reshape(n_timesteps, ndim, ndim)
     g1[:] = 3.8
+    hc[:] = 20.
+    za[:] = 20.0 + 2.0
     f.close()
 
 def convert_rh_to_qair(rh, tair, press):
