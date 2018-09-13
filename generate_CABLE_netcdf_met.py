@@ -23,6 +23,7 @@ def main(in_fname, out_fname, co2_conc):
     DEG_2_KELVIN = 273.15
     SW_2_PAR = 2.3
     PAR_2_SW = 1.0 / SW_2_PAR
+    HLFHR_2_SEC = 1.0 / 1800.
 
     df = pd.read_csv(in_fname)
 
@@ -152,6 +153,7 @@ def main(in_fname, out_fname, co2_conc):
     SWdown[:,0,0] = (df.PAR.values * PAR_2_SW).reshape(n_timesteps, ndim, ndim)
     Tair[:,0,0,0] = (df.TAIR.values + DEG_2_KELVIN).reshape(n_timesteps,
                                                             ndim, ndim, ndim)
+    df.PPT *= HLFHR_2_SEC
     Rainf[:,0,0] = df.PPT.values.reshape(n_timesteps, ndim, ndim)
     qa_vals = convert_rh_to_qair(df.RH.values, df.TAIR.values, df.PRESS.values)
     Qair[:,0,0,0] = qa_vals.reshape(n_timesteps, ndim, ndim, ndim)
